@@ -35,19 +35,20 @@ export default function App() {
   const isDraggable = action === ACTIONS.SELECT;
 
   useEffect(() => {
-    ;(async() => {
+    (async () => {
       try {
-        const getResponse = await axios.get("http://localhost:7000/api/v1/data/canvasdata")
-          setArrows(getResponse.data.data.arrows)
-          setRectangles(getResponse.data.data.rectangle)
-          setCircles(getResponse.data.data.circle)
-          setScribbles(getResponse.data.data.scribble)
-       } catch (error) {
-        console.log(error)
-       }
-    
-    })()
-  },[])
+        const getResponse = await axios.get(
+          "https://your-canvas-1.onrender.com/api/v1/data/canvasdata"
+        );
+        setArrows(getResponse.data.data.arrows);
+        setRectangles(getResponse.data.data.rectangle);
+        setCircles(getResponse.data.data.circle);
+        setScribbles(getResponse.data.data.scribble);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   function onPointerDown() {
     if (action === ACTIONS.SELECT) return;
@@ -199,23 +200,22 @@ export default function App() {
   }
 
   async function postRequestHandler() {
-   try {
-    const response = await axios.post(
-      `http://localhost:7000/api/v1/data/canvasdata`,
-      { arrows, rectangles, circles, scribbles}
-    );
-    console.log(response.data.status)
-   } catch (error) {
-      console.log(error)
-   }
-
-   
-    
+    try {
+      const response = await axios.post(
+        `https://your-canvas-1.onrender.com/api/v1/data/canvasdata`,
+        { arrows, rectangles, circles, scribbles }
+      );
+      if (response.data.status == "Success") {
+        alert("Changes Saved Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   // console.log(rectangles);
   // console.log(circles);
   // console.log(arrows.length && arrows[0]);
-  console.log(scribbles);
+
   return (
     <>
       <div className="relative w-full h-screen overflow-hidden">
@@ -289,13 +289,7 @@ export default function App() {
               <button onClick={clearCanvas}>ClearCanvas</button>
             </div>
             <div className="saveChanges">
-              <button
-                onClick={
-                  postRequestHandler
-                }
-              >
-                Save Changes
-              </button>
+              <button onClick={postRequestHandler}>Save Changes</button>
             </div>
           </div>
         </div>
